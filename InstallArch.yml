@@ -6,7 +6,6 @@
 ---
 - name: bootstrap base system
   hosts: device
-  gather_facts: yes
   user: root
   tasks:
 
