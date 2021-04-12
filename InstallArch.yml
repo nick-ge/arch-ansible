@@ -9,6 +9,6 @@
   user: root
   tasks:
 
-    name: setting the new hostname
-    hostname:
-      name: "ansssss"
+    - name: setting the new hostname
+      hostname:
+        name: "ansssss"
