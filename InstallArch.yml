@@ -9,6 +9,57 @@
   user: root
   tasks:
 
-    - name: setting the new hostname
-      hostname:
-        name: "ansssss"
+    - name: create and open luks container
+      luks_device:
+        device: "{{ luks_partition }}"
+        state: opened
+        passphrase: "{{ luks_passphrase }}"
+        name: "{{ luks_name }}"
+        type: luks2
+
+    - name: create logical volume for /boot
+      lvol:
+        vg: "{{ volume_group }}"
+        pvs: "/dev/mapper/{{ luks_name }}"
+        lv: "{{ lv_boot }}"
+        size: "{{ lv_boot_size }}"
+
+    - name: create logical volume for /swap
+      lvol:
+        vg: "{{ volume_group }}"
+        pvs: "/dev/mapper/{{ luks_name }}"
+        lv: "{{ lv_swap }}"
+        size: "{{ lv_swap_size }}"
+
+    - name: create logical volume for /home
+      lvol:
+        vg: "{{ volume_group }}"
+        pvs: "/dev/mapper/{{ luks_name }}"
+        lv: "{{ lv_home }}"
+        size: "{{ lv_home_size }}"
+
+    - name: create logical volume for /root with remaining size
+      lvol:
+        vg: "{{ volume_group}}"
+        pvs: "/dev/mapper/{{ luks_name }}"
+        lv: "{{ lv_root }}"
+        size: 100%FREE
+
+    - name: create ext4 on /root
+      filesystem:
+        dev: "/dev/{{ volume_group }}/{{ lv_root }}"
+        fstype: ext4
+        state: present
+
+    - name: create ext4 on /home
+      filesystem:
+        dev: "/dev/{{ volume_group }}/{{ lv_home }}"
+        fstype: ext4
+        state: present
+
+    - name: create swap
+      filesystem:
+        dev: "/dev/{{ volume_group }}/{{ lv_swap }}"
+        fstype: swap
+        state: present
+

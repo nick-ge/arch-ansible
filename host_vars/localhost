@@ -1,1 +1,22 @@
-hostname: arch-test
+hostname: foobar
+
+# LUKS settings
+luks_partition: /dev/sda
+luks_name: cryptlvm
+luks_passphrase: foobar1234
+
+# LVM settings
+volume_group: mainvg
+
+lv_boot: boot
+lv_boot_size: 200m
+
+lv_swap: swap
+lv_swap_size: 2G
+# lv_swap_size:
+
+lv_home: home
+lv_home_size: 2G
+
+lv_root: root
+
