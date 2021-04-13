@@ -17,33 +17,39 @@
         name: "{{ luks_name }}"
         type: luks2
 
+    - name: create volume group on LUKS container
+      lvg:
+        pvs: "/dev/mapper/{{ luks_name }}"
+        vg: "{{ volume_group }}"
+        state: present
+
     - name: create logical volume for /boot
       lvol:
         vg: "{{ volume_group }}"
-        pvs: "/dev/mapper/{{ luks_name }}"
         lv: "{{ lv_boot }}"
         size: "{{ lv_boot_size }}"
+        state: present
 
     - name: create logical volume for /swap
       lvol:
         vg: "{{ volume_group }}"
-        pvs: "/dev/mapper/{{ luks_name }}"
         lv: "{{ lv_swap }}"
         size: "{{ lv_swap_size }}"
+        state: present
 
     - name: create logical volume for /home
       lvol:
         vg: "{{ volume_group }}"
-        pvs: "/dev/mapper/{{ luks_name }}"
         lv: "{{ lv_home }}"
         size: "{{ lv_home_size }}"
+        state: present
 
     - name: create logical volume for /root with remaining size
       lvol:
         vg: "{{ volume_group}}"
-        pvs: "/dev/mapper/{{ luks_name }}"
         lv: "{{ lv_root }}"
         size: 100%FREE
+        state: present
 
     - name: create ext4 on /root
       filesystem:
