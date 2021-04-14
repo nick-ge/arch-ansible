@@ -1,28 +1,9 @@
 hostname: foobar
 
-# partitioning
 target_device_uuid: d993a5a7-8630-4ac9-b320-5da9daedeb97
 target_device_path: /dev/sda
 target_device_id: /dev/disk/by-id/ata-VBOX_HARDDISK_VBe91bd69a-d4066290
 
-boot_part_size: 200MiB
-
-## LUKS settings
-luks_partition_path: /dev/sda2
-luks_name: cryptlvm
-luks_passphrase: foobar1234
-
-## LVM settings
-volume_group: rootvg
-
-lv_swap: swap
-lv_swap_size: 1G
-
-lv_home: home
-lv_home_size: 2G
-
-lv_root: root
-lv_root_size: 5G
 
 # chroot
 timezone: /usr/share/zoneinfo/Europe/Berlin

@@ -1,0 +1,17 @@
+---
+- name: create bios/gpt partitioning scheme
+  include_tasks: bios_gpt_partitioning.yml
+  when: bios_gpt
+
+- name: create luks container on primary partition
+  include_tasks: luks_encryption.yml
+
+- name: setup lvm environment
+  include_tasks: lvm_setup.yml
+
+- name: format logical volumes with file systems
+  include_tasks: create_filesystems.yml
+
+- name: ensure each logical volume is mounted
+  include_tasks: mount.yml
+

@@ -1,0 +1,24 @@
+---
+- name: partitioning - create bios/gpt boot partition
+  parted:
+    device: "{{ target_device_id }}"
+    label: gpt
+    name: boot
+    number: 1
+    part_start: "0%"
+    part_end: '{{ boot_part_size }}'
+    unit: "MiB"
+    flags:
+      - bios_grub
+    state: present
+
+- name: partitioning - create primary partition
+  parted:
+    device: "{{ target_device_id }}"
+    label: gpt
+    name: root
+    number: 2
+    part_start: '{{ boot_part_size }}'
+    part_end: "100%"
+    unit: "MiB"
+    state: present

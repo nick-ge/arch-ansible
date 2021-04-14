@@ -1,0 +1,28 @@
+---
+- name: lvm - create volume group on LUKS container
+  lvg:
+    pvs: "/dev/mapper/{{ luks_name }}"
+    vg: "{{ volume_group }}"
+    state: present
+
+- name: lvm - create logical volume for swap
+  lvol:
+    vg: "{{ volume_group }}"
+    lv: "{{ lv_swap }}"
+    size: "{{ lv_swap_size }}"
+    state: present
+
+- name: lvm - create logical volume for /root
+  lvol:
+    vg: "{{ volume_group}}"
+    lv: "{{ lv_root }}"
+    size: "{{ lv_root_size }}"
+    state: present
+
+- name: lvm - create logical volume for /home
+  lvol:
+    vg: "{{ volume_group }}"
+    lv: "{{ lv_home }}"
+    size: 100%FREE
+    shrink: no
+    state: present

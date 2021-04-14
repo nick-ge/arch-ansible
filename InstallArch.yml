@@ -8,110 +8,8 @@
   user: root
   tasks:
 
-    - name: partitioning - create bios/gpt boot partition
-      parted:
-        device: "{{ target_device_id }}"
-        label: gpt
-        name: boot
-        number: 1
-        part_start: "0%"
-        part_end: '{{ boot_part_size }}'
-        unit: "MiB"
-        flags:
-          - bios_grub
-        state: present
-
-    - name: partitioning - create primary partition
-      parted:
-        device: "{{ target_device_id }}"
-        label: gpt
-        name: root
-        number: 2
-        part_start: '{{ boot_part_size }}'
-        part_end: "100%"
-        unit: "MiB"
-        state: present
-
-    - name: encryption - create and open luks container
-      luks_device:
-        device: "{{ luks_partition_path }}"
-        state: opened
-        passphrase: "{{ luks_passphrase }}"
-        name: "{{ luks_name }}"
-        type: luks2
-
-    - name: lvm - create volume group on LUKS container
-      lvg:
-        pvs: "/dev/mapper/{{ luks_name }}"
-        vg: "{{ volume_group }}"
-        state: present
-
-    - name: lvm - create logical volume for swap
-      lvol:
-        vg: "{{ volume_group }}"
-        lv: "{{ lv_swap }}"
-        size: "{{ lv_swap_size }}"
-        state: present
-
-    - name: lvm - create logical volume for /root
-      lvol:
-        vg: "{{ volume_group}}"
-        lv: "{{ lv_root }}"
-        size: "{{ lv_root_size }}"
-        state: present
-
-    - name: lvm - create logical volume for /home
-      lvol:
-        vg: "{{ volume_group }}"
-        lv: "{{ lv_home }}"
-        size: 100%FREE
-        shrink: no
-        state: present
-
-    - name: formatting - create swap
-      filesystem:
-        dev: "/dev/{{ volume_group }}/{{ lv_swap }}"
-        fstype: swap
-        state: present
-
-    - name: formatting - create ext4 on /root
-      filesystem:
-        dev: "/dev/{{ volume_group }}/{{ lv_root }}"
-        fstype: ext4
-        state: present
-
-    - name: formatting - create ext4 on /home
-      filesystem:
-        dev: "/dev/{{ volume_group }}/{{ lv_home }}"
-        fstype: ext4
-        state: present
-
-    - name: formatting - create ext4 on /boot
-      filesystem:
-        dev: "/dev/sda1"
-        fstype: ext4
-        state: present
-
-    - name: mount lv for root to /mnt
-      mount:
-        path: /mnt
-        src: "/dev/mapper/{{ volume_group }}-{{ lv_root }}"
-        fstype: ext4
-        state: mounted
-
-    - name: mount lv for home to /mnt/home
-      mount:
-        path: /mnt/home
-        src: "/dev/mapper/{{ volume_group }}-{{ lv_home }}"
-        fstype: ext4
-        state: mounted
-
-    - name: mount boot partition to /mnt/boot
-      mount:
-        path: /mnt/boot
-        src: "/dev/sda1"
-        fstype: ext4
-        state: mounted
+    - include_role:
+        name: partitioning_and_encryption
 
     - name: install base system via pacstrap
       command: /usr/bin/pacstrap /mnt base linux linux-firmware
@@ -119,75 +17,75 @@
     - name: generate fstab
       command: /usr/bin/genfstab -U /mnt >> /mnt/etc/fstab
 
-    - name: chroot into new system
-      connection: chroot
-        chroot_exe: /usr/bin/arch-chroot
-        remote_addr: /mnt
-
-    - name: set timezone
-      file:
-        src: "{{ timezone }}"
-        state: link
-        mode: 0777
-        force: yes
-
-    - name: set hwclock to UTC
-      timezone:
-        hwclock: UTC
-
-    - name: generate /etc/adjtime
-      command: /usr/bin/hwlock --systohc
-
-    - name: generate locales
-      locale_gen:
-        name: en_US.UTF-8
-        state: present
-
-    - name: verify keyboard layout
-      lineinfile:
-        path: /etc/vconsole.conf
-        line: "{{ keyboard_layout}}"
-        create: yes
-        mode: 0644
-        owner: root
-        state: present
-
-    - name: set hostname
-      hostname:
-        name: "{{ hostname }}"
-
-    - name: vefify lvm2 package is installed
-      pacman:
-        name: lvm2
-        state: present
-
-    - name: insert hooks for new initramfs
-      lineinfile:
-        path: /etc/mkinitcpio.conf
-        regex: '^HOOKS=(.*)'
-        #line: 'HOOKS=(base udev autodetect modconf block encrypt lvm2 filesystems keyboard fsck)'
-        line: 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)'
-        mode: 0644
-        owner: root
-        state: present
-
-    - name: generate new initramfs
-      command: /usr/bin/mkinitcpio -P
-
-    - name: vefify grub package is installed
-      pacman:
-        name: grub
-        state: present
-
-    - name: install grub
-      command: "/usr/bin/grub-install --target=i386-pc {{ target_device_path }}"
-
-    - name: configure grub
-      lineinfile:
-        path: /etc/default/grub
-        regex: '^GRUB_CMDLINE_LINUX_DEFAULT='
-        line: 'cryptdevice=/dev/{{ volume_group }}/{{ lv_root }}:cryptroot root=/dev/{{ volume_group }}/{{ lv_root }}'
-        state: present
-
-    - name: generate grub config
-      command: grub-mkconfig -o /boot/grub/grub.cfg
+      #    - name: chroot into new system
+      #      connection: chroot
+      #        chroot_exe: /usr/bin/arch-chroot
+      #        remote_addr: /mnt
+      #
+      #    - name: set timezone
+      #      file:
+      #        src: "{{ timezone }}"
+      #        state: link
+      #        mode: 0777
+      #        force: yes
+      #
+      #    - name: set hwclock to UTC
+      #      timezone:
+      #        hwclock: UTC
+      #
+      #    - name: generate /etc/adjtime
+      #      command: /usr/bin/hwlock --systohc
+      #
+      #    - name: generate locales
+      #      locale_gen:
+      #        name: en_US.UTF-8
+      #        state: present
+      #
+      #    - name: verify keyboard layout
+      #      lineinfile:
+      #        path: /etc/vconsole.conf
+      #        line: "{{ keyboard_layout}}"
+      #        create: yes
+      #        mode: 0644
+      #        owner: root
+      #        state: present
+      #
+      #    - name: set hostname
+      #      hostname:
+      #        name: "{{ hostname }}"
+      #
+      #    - name: vefify lvm2 package is installed
+      #      pacman:
+      #        name: lvm2
+      #        state: present
+      #
+      #    - name: insert hooks for new initramfs
+      #      lineinfile:
+      #        path: /etc/mkinitcpio.conf
+      #        regex: '^HOOKS=(.*)'
+      #        #line: 'HOOKS=(base udev autodetect modconf block encrypt lvm2 filesystems keyboard fsck)'
+      #        line: 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)'
+      #        mode: 0644
+      #        owner: root
+      #        state: present
+      #
+      #    - name: generate new initramfs
+      #      command: /usr/bin/mkinitcpio -P
+      #
+      #    - name: vefify grub package is installed
+      #      pacman:
+      #        name: grub
+      #        state: present
+      #
+      #    - name: install grub
+      #      command: "/usr/bin/grub-install --target=i386-pc {{ target_device_path }}"
+      #
+      #    - name: configure grub
+      #      lineinfile:
+      #        path: /etc/default/grub
+      #        regex: '^GRUB_CMDLINE_LINUX_DEFAULT='
+      #        line: 'cryptdevice=/dev/{{ volume_group }}/{{ lv_root }}:cryptroot root=/dev/{{ volume_group }}/{{ lv_root }}'
+      #        state: present
+      #
+      #    - name: generate grub config
+      #      command: grub-mkconfig -o /boot/grub/grub.cfg

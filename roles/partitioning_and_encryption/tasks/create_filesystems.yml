@@ -1,0 +1,24 @@
+---
+- name: formatting - create swap
+  filesystem:
+    dev: "/dev/{{ volume_group }}/{{ lv_swap }}"
+    fstype: swap
+    state: present
+
+- name: formatting - create ext4 on /root
+  filesystem:
+    dev: "/dev/{{ volume_group }}/{{ lv_root }}"
+    fstype: ext4
+    state: present
+
+- name: formatting - create ext4 on /home
+  filesystem:
+    dev: "/dev/{{ volume_group }}/{{ lv_home }}"
+    fstype: ext4
+    state: present
+
+- name: formatting - create ext4 on /boot
+  filesystem:
+    dev: "/dev/sda1"
+    fstype: ext4
+    state: present

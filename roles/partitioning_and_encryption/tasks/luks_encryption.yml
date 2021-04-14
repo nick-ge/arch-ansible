@@ -1,0 +1,8 @@
+---
+- name: encryption - create and open luks container
+  luks_device:
+    device: "{{ luks_partition_path }}"
+    state: opened
+    passphrase: "{{ luks_passphrase }}"
+    name: "{{ luks_name }}"
+    type: luks2
