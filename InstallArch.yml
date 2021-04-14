@@ -88,7 +88,7 @@
     - name: mount lv root to /mnt
       mount:
         path: /mnt
-        src: "/dev/mapper/{{ lv_root }}"
+        src: "/dev/mapper/{{ volume_group }}-{{ lv_root }}"
         fstype: ext4
         state: mounted
 
