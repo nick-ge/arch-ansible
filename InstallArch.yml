@@ -119,10 +119,6 @@
     - name: generate fstab
       command: /usr/bin/genfstab -U /mnt >> /mnt/etc/fstab
 
-    ##############
-    ### Chroot ###
-    ##############
-
     - name: chroot into new system
       chroot:
         chroot_exe: /usr/bin/arch-chroot
