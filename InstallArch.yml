@@ -120,7 +120,7 @@
       command: /usr/bin/genfstab -U /mnt >> /mnt/etc/fstab
 
     - name: chroot into new system
-      chroot:
+      community.general.chroot:
         chroot_exe: /usr/bin/arch-chroot
         remote_addr: /mnt
 
