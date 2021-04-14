@@ -5,8 +5,7 @@ target_device_uuid: d993a5a7-8630-4ac9-b320-5da9daedeb97
 target_device_path: /dev/sda
 target_device_id: /dev/disk/by-id/ata-VBOX_HARDDISK_VBe91bd69a-d4066290
 
-boot_part_size: 200
-size_unit: MiB
+boot_part_size: 200MiB
 
 ## LUKS settings
 luks_partition_path: /dev/sda2
