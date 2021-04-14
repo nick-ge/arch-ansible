@@ -45,25 +45,31 @@
         vg: "{{ volume_group }}"
         state: present
 
-    - name: lvm - create logical volume for /home
-      lvol:
-        vg: "{{ volume_group }}"
-        lv: "{{ lv_home }}"
-        size: "{{ lv_home_size }}"
-        state: present
-
     - name: lvm - create logical volume for swap
       lvol:
         vg: "{{ volume_group }}"
         lv: "{{ lv_swap }}"
-        size: "{{ lv_home_size }}"
+        size: "{{ lv_swap_size }}"
         state: present
 
-    - name: lvm - create logical volume for /root with remaining size
+    - name: lvm - create logical volume for /root
       lvol:
         vg: "{{ volume_group}}"
         lv: "{{ lv_root }}"
+        size: "{{ lv_root_size }}"
+        state: present
+
+    - name: lvm - create logical volume for /home
+      lvol:
+        vg: "{{ volume_group }}"
+        lv: "{{ lv_home }}"
         size: 100%FREE
+        state: present
+
+    - name: formatting - create swap
+      filesystem:
+        dev: "/dev/{{ volume_group }}/{{ lv_swap }}"
+        fstype: swap
         state: present
 
     - name: formatting - create ext4 on /root
@@ -78,9 +84,4 @@
         fstype: ext4
         state: present
 
-    - name: formatting - create swap
-      filesystem:
-        dev: "/dev/{{ volume_group }}/{{ lv_swap }}"
-        fstype: swap
-        state: present
 
