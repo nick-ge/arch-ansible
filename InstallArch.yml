@@ -84,4 +84,13 @@
         fstype: ext4
         state: present
 
+    - name: mount lv root to /mnt
+      mount:
+        path: /mnt
+        src: "/dev/mapper/{{ lv_root }}"
+        fstype: ext4
+        state: mounted
 
+    - name: install base system via pacstrap
+      command: '/usr/bin/pacstrap /mnt base linux linux-firmware'
+        register: output
