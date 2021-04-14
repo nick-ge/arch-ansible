@@ -16,6 +16,7 @@
         name: boot
         number: 1
         part_end: '{{ boot_part_size }}'
+        unit: "MiB"
         state: present
 
     - name: partitioning - create primary partition
