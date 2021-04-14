@@ -92,5 +92,5 @@
         state: mounted
 
     - name: install base system via pacstrap
-      command: '/usr/bin/pacstrap /mnt base linux linux-firmware'
-        register: output
+      command: /usr/bin/pacstrap /mnt base linux linux-firmware
+      register: output
