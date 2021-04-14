@@ -12,6 +12,8 @@
     - name: partitioning - create bios/gpt boot partition
       parted:
         device: "{{ target_device_id }}"
+        label: gpt
+        name: boot
         number: 1
         part_end: "{{ boot_part_size }}"
         state: present
@@ -19,7 +21,7 @@
     - name: partitioning - create primary partition
       parted:
         device: "{{ target_device_id }}"
-        label: gpt
+        name: root
         number: 2
         state: present
 
