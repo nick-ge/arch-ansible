@@ -64,6 +64,7 @@
         vg: "{{ volume_group }}"
         lv: "{{ lv_home }}"
         size: 100%FREE
+        shrink: no
         state: present
 
     - name: formatting - create swap
