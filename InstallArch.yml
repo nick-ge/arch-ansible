@@ -9,9 +9,23 @@
   user: root
   tasks:
 
+    - name: partitioning - create bios/gpt boot partition
+      parted:
+        device: "{{ target_device_id }}"
+        number: 1
+        part_end: "{{ boot_part_size }}"
+        state: present
+
+    - name: partitioning - create primary partition
+      parted:
+        device: "{{ target_device_id }}"
+        label: gpt
+        number: 2
+        state: present
+
     - name: create and open luks container
       luks_device:
-        device: "{{ luks_partition }}"
+        device: "{{ luks_partition_path }}"
         state: opened
         passphrase: "{{ luks_passphrase }}"
         name: "{{ luks_name }}"
@@ -21,20 +35,6 @@
       lvg:
         pvs: "/dev/mapper/{{ luks_name }}"
         vg: "{{ volume_group }}"
-        state: present
-
-    - name: create logical volume for /boot
-      lvol:
-        vg: "{{ volume_group }}"
-        lv: "{{ lv_boot }}"
-        size: "{{ lv_boot_size }}"
-        state: present
-
-    - name: create logical volume for /swap
-      lvol:
-        vg: "{{ volume_group }}"
-        lv: "{{ lv_swap }}"
-        size: "{{ lv_swap_size }}"
         state: present
 
     - name: create logical volume for /home
