@@ -23,3 +23,11 @@ lv_home_size: 2G
 
 lv_root: root
 lv_root_size: 5G
+
+# chroot
+timezone: /usr/share/zoneinfo/Europe/Berlin
+
+# locales
+keyboard_layout: KEYMAP=de
+
+hostname: memepad

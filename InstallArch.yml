@@ -1,10 +1,7 @@
 # author: Nick Gerzen
 #
 # Entry point of entire installation and setup process. It installs a base Arch Linux system and configures
-# it to special needs.
-
----
-- name: bootstrap base system
+# it to special needs.  --- - name: bootstrap base system
   hosts: localhost
   user: root
   tasks:
@@ -18,6 +15,8 @@
         part_start: "0%"
         part_end: '{{ boot_part_size }}'
         unit: "MiB"
+        flags:
+          - bios_grub
         state: present
 
     - name: partitioning - create primary partition
@@ -85,13 +84,112 @@
         fstype: ext4
         state: present
 
-    - name: mount lv root to /mnt
+    - name: formatting - create ext4 on /boot
+      filesystem:
+        dev: "/dev/sda1"
+        fstype: ext4
+        state: present
+
+    - name: mount lv for root to /mnt
       mount:
         path: /mnt
         src: "/dev/mapper/{{ volume_group }}-{{ lv_root }}"
         fstype: ext4
         state: mounted
 
+    - name: mount lv for home to /mnt/home
+      mount:
+        path: /mnt/home
+        src: "/dev/mapper/{{ volume_group }}-{{ lv_home }}"
+        fstype: ext4
+        state: mounted
+
+    - name: mount boot partition to /mnt/boot
+      mount:
+        path: /mnt/boot
+        src: "/dev/sda1"
+        fstype: ext4
+        state: mounted
+
     - name: install base system via pacstrap
       command: /usr/bin/pacstrap /mnt base linux linux-firmware
-      register: output
+
+    - name: generate fstab
+      command: /usr/bin/genfstab -U /mnt >> /mnt/etc/fstab
+
+    ##############
+    ### Chroot ###
+    ##############
+
+    - name: chroot into new system
+      chroot:
+        chroot_exe: /usr/bin/arch-chroot
+        remote_addr: /mnt
+
+    - name: set timezone
+      file:
+        src: "{{ timezone }}"
+        state: link
+        mode: 0777
+        force: yes
+
+    - name: set hwclock to UTC
+      timezone:
+        hwclock: UTC
+
+    - name: generate /etc/adjtime
+      command: /usr/bin/hwlock --systohc
+
+    - name: generate locales
+      locale_gen:
+        name: en_US.UTF-8
+        state: present
+
+    - name: verify keyboard layout
+      lineinfile:
+        path: /etc/vconsole.conf
+        line: "{{ keyboard_layout}}"
+        create: yes
+        mode: 0644
+        owner: root
+        state: present
+
+    - name: set hostname
+      hostname:
+        name: "{{ hostname }}"
+
+    - name: vefify lvm2 package is installed
+      pacman:
+        name: lvm2
+        state: present
+
+    - name: insert hooks for new initramfs
+      lineinfile:
+        path: /etc/mkinitcpio.conf
+        regex: '^HOOKS=(.*)'
+        #line: 'HOOKS=(base udev autodetect modconf block encrypt lvm2 filesystems keyboard fsck)'
+        line: 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)'
+        mode: 0644
+        owner: root
+        state: present
+
+    - name: generate new initramfs
+      command: /usr/bin/mkinitcpio -P
+
+    - name: vefify grub package is installed
+      pacman:
+        name: grub
+        state: present
+
+    - name: install grub
+      command: "/usr/bin/grub-install --target=i386-pc {{ target_device_path }}"
+
+    - name: configure grub
+      lineinfile:
+        path: /etc/default/grub
+        regex: '^GRUB_CMDLINE_LINUX_DEFAULT='
+        line: 'cryptdevice=/dev/{{ volume_group }}/{{ lv_root }}:cryptroot root=/dev/{{ volume_group }}/{{ lv_root }}'
+        state: present
+
+    - name: generate grub config
+      command: grub-mkconfig -o /boot/grub/grub.cfg
