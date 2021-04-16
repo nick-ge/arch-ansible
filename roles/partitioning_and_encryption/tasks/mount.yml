@@ -1,14 +1,30 @@
 ---
+- name: ensure root mount point exists
+  file:
+    path: "{{ mount_point }}/sys"
+    state: directory
+    mode: 0755
+    ower: root
+    group: root
+
+- name: ensure boot mount point exists
+  file:
+    path: "{{ mount_point }}/boot"
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
 - name: mount lv for root
   mount:
-    path: "{{ mount_point }}"
+    path: "{{ mount_point }}/sys"
     src: "/dev/mapper/{{ volume_group }}-{{ lv_root }}"
     fstype: ext4
     state: mounted
 
 - name: mount lv for home
   mount:
-    path: "{{ mount_point }}/home"
+    path: "{{ mount_point }}/sys/home"
     src: "/dev/mapper/{{ volume_group }}-{{ lv_home }}"
     fstype: ext4
     state: mounted

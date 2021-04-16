@@ -10,6 +10,7 @@
     unit: "{{ boot_part_unit }}"
     flags:
       - bios_grub
+    align: undefined
     state: present
 
 - name: partitioning - create primary partition

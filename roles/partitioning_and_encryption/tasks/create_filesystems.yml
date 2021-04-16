@@ -20,7 +20,7 @@
     fstype: ext4
     state: present
 
-- name: formatting - create ext4 on /boot
+- name: formatting - create ext4 on /boot partition
   filesystem:
     dev: "/dev/sda1"
     fstype: ext4
