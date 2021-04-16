@@ -1,15 +1,16 @@
-hostname: foobar
-
+### device identifier that specifies where the system will be installed
 target_device_uuid: d993a5a7-8630-4ac9-b320-5da9daedeb97
 target_device_path: /dev/sda
 target_device_id: /dev/disk/by-id/ata-VBOX_HARDDISK_VBe91bd69a-d4066290
+###
+
+mount_point: /mnt
 
 bios_gpt: yes
+hostname: memepad
 
-# chroot
 timezone: /usr/share/zoneinfo/Europe/Berlin
 
 # locales
 keyboard_layout: KEYMAP=de
 
-hostname: memepad

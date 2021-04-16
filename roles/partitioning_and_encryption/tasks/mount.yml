@@ -1,21 +1,21 @@
 ---
-- name: mount lv for root to /mnt
+- name: mount lv for root
   mount:
-    path: /mnt
+    path: "{{ mount_point }}"
     src: "/dev/mapper/{{ volume_group }}-{{ lv_root }}"
     fstype: ext4
     state: mounted
 
-- name: mount lv for home to /mnt/home
+- name: mount lv for home
   mount:
-    path: /mnt/home
+    path: "{{ mount_point }}/home"
     src: "/dev/mapper/{{ volume_group }}-{{ lv_home }}"
     fstype: ext4
     state: mounted
 
-- name: mount boot partition to /mnt/boot
+- name: mount boot partition
   mount:
-    path: /mnt/boot
-    src: "/dev/sda1"
+    path: "{{ mount_point }}/boot"
+    src: /dev/sda1
     fstype: ext4
     state: mounted

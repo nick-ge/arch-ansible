@@ -10,18 +10,17 @@
 
     - include_role:
         name: partitioning_and_encryption
+        vars:
+          mount_point: "{{ mount_point }}"
 
     - name: install base system via pacstrap
-      command: /usr/bin/pacstrap /mnt base linux linux-firmware
+      command: "/usr/bin/pacstrap {{ mount_point }} base linux linux-firmware lvm2 grub vim openssh networkmanager man-db man-pages"
 
-    - name: generate fstab
-      command: /usr/bin/genfstab -U /mnt >> /mnt/etc/fstab
+    - include_role:
+        name: setup_base_system
+        vars:
+          mount_point: "{{ mount_point }}"
 
-      #    - name: chroot into new system
-      #      connection: chroot
-      #        chroot_exe: /usr/bin/arch-chroot
-      #        remote_addr: /mnt
-      #
       #    - name: set timezone
       #      file:
       #        src: "{{ timezone }}"

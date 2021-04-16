@@ -1,0 +1,64 @@
+---
+- name: generate fstab
+  command: "/usr/bin/genfstab -U {{ mount_point }}  >> {{ mount_point }}/etc/fstab"
+
+- name: set timezone
+  file:
+    src: "{{ mount_point }}/{{ timezone }}"
+    path: "{{ mount_point }}/etc/localtime"
+    state: link
+    mode: 0777
+    force: yes
+
+- name: generate /etc/adjtime
+  command: "arch-chroot {{ mount_point }} /usr/bin/hwlock --systohc"
+
+- name: copy /etc/locale.gen to target
+  template:
+    src: templates/locale.gen.j2
+    dest: "{{ mount_point }}/etc/locale.gen"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: generate locales
+  command: "arch-chroot {{ mount_point }} locale-gen"
+
+- name: create locale.conf
+  template:
+    src: templates/locale.conf.j2
+    dest: "{{ mount_point }}/etc/locale.conf"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: create vconsole.conf
+  template:
+    src: templates/vconsole.conf.j2
+    dest: "{{ mount_point }}/etc/vconsole.conf"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: set hostname
+  command: "arch-chroot {{ mount_point }} hostname {{ hostname }}"
+
+- name: set /etc/hosts
+  template:
+    src: hosts.j2
+    dest: "{{ mount_point }}/etc/hosts"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: insert hooks for new initramfs
+  lineinfile:
+    path: "{{ mount_point }}/etc/mkinitcpio.conf"
+    regex: '^HOOKS=(.*)'
+    line: 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)'
+    mode: 0644
+    owner: root
+    state: present
+
+- name: generate new initramfs
+  command: "arch-chroot {{ mount_point }} mkinitcpio -P "
