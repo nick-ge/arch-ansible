@@ -11,7 +11,7 @@
     force: yes
 
 - name: generate /etc/adjtime
-  command: "arch-chroot {{ mount_point }} /usr/bin/hwlock --systohc"
+  command: "arch-chroot {{ mount_point }} /usr/bin/hwclock --systohc"
 
 - name: copy /etc/locale.gen to target
   template:
