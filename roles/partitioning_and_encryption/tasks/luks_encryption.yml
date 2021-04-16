@@ -5,4 +5,4 @@
     state: opened
     passphrase: "{{ luks_passphrase }}"
     name: "{{ luks_name }}"
-    type: luks2
+    type: luks1

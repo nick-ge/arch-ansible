@@ -1,0 +1,33 @@
+---
+- name: install grub
+  command: "arch-chroot {{ mount_point }} grub-install --target=i386-pc {{ target_device_path }}"
+
+- name: configure grub
+  template:
+    src: grub.j2
+    dest: "{{ mount_point }}/etc/default/grub"
+    force: yes
+    mode: 0644
+    owner: root
+    group: root
+
+- name: insert hooks for new initramfs
+  lineinfile:
+    path: "{{ mount_point }}/etc/mkinitcpio.conf"
+    regex: '^HOOKS=(.*)'
+    line: 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)'
+    mode: 0644
+    owner: root
+    state: present
+
+      #- name: configure mkinitcpio
+      #  template:
+      #    src: mkinicpio.conf.j2
+      #    dest: "{{ mount_point }}/etc/mkinitcpio.conf"
+      #    force: yes
+
+- name: generate grub config
+  command: "arch-chroot {{ mount_point }} grub-mkconfig -o /boot/grub/grub.cfg"
+
+- name: create new initramfs
+  command: "arch-chroot {{ mount_point }} mkinitcpio -P"

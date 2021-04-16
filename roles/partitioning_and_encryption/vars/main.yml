@@ -1,4 +1,5 @@
-boot_part_size: 200MiB
+boot_part_size: 1MiB
+boot_part_unit: MiB
 
 # LUKS settings
 luks_partition_path: /dev/sda2

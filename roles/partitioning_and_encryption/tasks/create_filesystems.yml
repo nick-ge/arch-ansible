@@ -5,6 +5,9 @@
     fstype: swap
     state: present
 
+- name: formatting - mark swap space
+  command: "swapon /dev/mapper/{{ lv_swap }}"
+
 - name: formatting - create ext4 on /root
   filesystem:
     dev: "/dev/{{ volume_group }}/{{ lv_root }}"
@@ -22,3 +25,4 @@
     dev: "/dev/sda1"
     fstype: ext4
     state: present
+
