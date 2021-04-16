@@ -6,7 +6,7 @@
     state: present
 
 - name: formatting - mark swap space
-  command: "swapon /dev/mapper/{{ lv_swap }}"
+  command: "swapon /dev/{{ volume_group }}/{{ lv_swap }}"
 
 - name: formatting - create ext4 on /root
   filesystem:
