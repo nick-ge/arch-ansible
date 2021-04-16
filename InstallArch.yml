@@ -14,7 +14,7 @@
         #  mount_point: "{{ mount_point }}"
 
     - name: install base system via pacstrap
-      command: "/usr/bin/pacstrap {{ mount_point }} base linux linux-firmware lvm2 grub vim openssh networkmanager man-db man-pages"
+      command: "/usr/bin/pacstrap {{ mount_point }} base linux linux-firmware lvm2 inetutils grub vim openssh networkmanager man-db man-pages"
 
     - include_role:
         name: setup_base_system
