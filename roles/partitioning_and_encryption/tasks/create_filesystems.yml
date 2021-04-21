@@ -4,6 +4,7 @@
     dev: "/dev/{{ volume_group }}/{{ lv_swap }}"
     fstype: swap
     state: present
+    force: yes
 
 - name: formatting - mark swap space
   command: "swapon /dev/{{ volume_group }}/{{ lv_swap }}"
@@ -13,16 +14,19 @@
     dev: "/dev/{{ volume_group }}/{{ lv_root }}"
     fstype: ext4
     state: present
+    force: yes
 
 - name: formatting - create ext4 on /home
   filesystem:
     dev: "/dev/{{ volume_group }}/{{ lv_home }}"
     fstype: ext4
     state: present
+    force: yes
 
 - name: formatting - create ext4 on /boot partition
   filesystem:
     dev: "/dev/sda1"
     fstype: ext4
     state: present
+    force: yes
 
