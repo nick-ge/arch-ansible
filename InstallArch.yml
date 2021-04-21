@@ -17,8 +17,8 @@
     - include_role:
         name: setup_base_system
 
-    - include_role:
-        name: install_grub
+        #- include_role:
+        #    name: install_grub
 
       #    - name: set timezone
       #      file:
