@@ -1,4 +1,4 @@
-boot_part_size: 2MiB
+boot_part_size: 200MiB
 boot_part_unit: MiB
 
 # LUKS settings
