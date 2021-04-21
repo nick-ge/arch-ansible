@@ -4,7 +4,7 @@
     path: "{{ mount_point }}/sys"
     state: directory
     mode: 0755
-    ower: root
+    owner: root
     group: root
 
 - name: ensure boot mount point exists
