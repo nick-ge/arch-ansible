@@ -4,8 +4,8 @@
 
 - name: set timezone
   file:
-    src: "{{ mount_point }}/sys/{{ timezone }}"
-    path: "{{ mount_point }}/sys/etc/localtime"
+    src: "{{ mount_point }}{{ timezone }}"
+    path: "{{ mount_point }}/etc/localtime"
     state: link
     mode: 0777
     force: yes
