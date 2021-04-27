@@ -1,6 +1,4 @@
 ---
-- name: generate fstab
-  command: "/usr/bin/genfstab -U {{ mount_point }} >> {{ mount_point }}/etc/fstab"
 
 - name: set timezone
   file:
@@ -50,6 +48,9 @@
     mode: 0644
     owner: root
     group: root
+
+- name: generate fstab
+  command: "/usr/bin/genfstab -U {{ mount_point }} >> {{ mount_point }}/etc/fstab"
 
 - name: insert hooks for new initramfs
   lineinfile:
