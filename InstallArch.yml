@@ -19,7 +19,6 @@
 
     - include_role:
         name: install_grub
-        when: grub
 
       #    - name: insert hooks for new initramfs
       #      lineinfile:
