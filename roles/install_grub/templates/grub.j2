@@ -3,7 +3,7 @@
 GRUB_DEFAULT=0
 GRUB_TIMEOUT=5
 GRUB_DISTRIBUTOR="Arch"
-GRUB_CMDLINE_LINUX_DEFAULT="cryptdevice=UUID=dd1727a7-23c5-4bd9-8d61-d8a07cf95628:cryptlvm root=/dev/rootvg/root loglevel=3 quiet"
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet cryptdevice=UUID=dd1727a7-23c5-4bd9-8d61-d8a07cf95628:cryptlvm root=/dev/rootvg/root "
 GRUB_CMDLINE_LINUX=""
 
 # Preload both GPT and MBR modules so that they are not missed

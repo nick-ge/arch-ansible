@@ -1,7 +1,7 @@
 ---
 - name: create bios partitioning scheme
-  include_tasks: bios_gpt_partitioning.yml
-  when: bios_gpt
+  include_tasks: bios_partitioning.yml
+  when: bios_mbr
 
 - name: create luks container on primary partition
   include_tasks: luks_encryption.yml

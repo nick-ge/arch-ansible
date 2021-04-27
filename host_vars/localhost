@@ -8,7 +8,7 @@ target_device_id: /dev/disk/by-id/ata-VBOX_HARDDISK_VBe91bd69a-d4066290
 
 mount_point: /mnt
 
-bios_gpt: yes
+bios_mbr: yes
 hostname: lenovo
 
 timezone: /usr/share/zoneinfo/Europe/Berlin
@@ -16,3 +16,4 @@ timezone: /usr/share/zoneinfo/Europe/Berlin
 # locales
 keyboard_layout: KEYMAP=de
 
+grub: yes

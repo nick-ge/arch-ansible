@@ -51,14 +51,18 @@
     owner: root
     group: root
 
-    #- name: insert hooks for new initramfs
-    #  lineinfile:
-    #    path: "{{ mount_point }}/etc/mkinitcpio.conf"
-    #    regex: '^HOOKS=(.*)'
-    #    line: 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)'
-    #    mode: 0644
-    #    owner: root
-    #    state: present
-    #
-    #- name: generate new initramfs
-    #  command: "arch-chroot {{ mount_point }} mkinitcpio -P "
+- name: insert hooks for new initramfs
+  lineinfile:
+    path: "{{ mount_point }}/etc/mkinitcpio.conf"
+    regex: '^HOOKS=(.*)'
+    line: 'HOOKS=(base udev autodetect keyboard keymap consolefont modconf block encrypt lvm2 filesystems fsck)'
+    mode: 0644
+    owner: root
+    state: present
+
+- name: generate new initramfs
+  command: "arch-chroot {{ mount_point }} mkinitcpio -P "
+
+- name: installation of grub
+  include_role: install_grub
+  when: grub

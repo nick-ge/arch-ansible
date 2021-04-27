@@ -17,46 +17,6 @@
     - include_role:
         name: setup_base_system
 
-        #- include_role:
-        #    name: install_grub
-
-      #    - name: set timezone
-      #      file:
-      #        src: "{{ timezone }}"
-      #        state: link
-      #        mode: 0777
-      #        force: yes
-      #
-      #    - name: set hwclock to UTC
-      #      timezone:
-      #        hwclock: UTC
-      #
-      #    - name: generate /etc/adjtime
-      #      command: /usr/bin/hwlock --systohc
-      #
-      #    - name: generate locales
-      #      locale_gen:
-      #        name: en_US.UTF-8
-      #        state: present
-      #
-      #    - name: verify keyboard layout
-      #      lineinfile:
-      #        path: /etc/vconsole.conf
-      #        line: "{{ keyboard_layout}}"
-      #        create: yes
-      #        mode: 0644
-      #        owner: root
-      #        state: present
-      #
-      #    - name: set hostname
-      #      hostname:
-      #        name: "{{ hostname }}"
-      #
-      #    - name: vefify lvm2 package is installed
-      #      pacman:
-      #        name: lvm2
-      #        state: present
-      #
       #    - name: insert hooks for new initramfs
       #      lineinfile:
       #        path: /etc/mkinitcpio.conf
