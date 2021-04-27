@@ -1,5 +1,5 @@
 ---
-- name: create bios/gpt partitioning scheme
+- name: create bios partitioning scheme
   include_tasks: bios_gpt_partitioning.yml
   when: bios_gpt
 

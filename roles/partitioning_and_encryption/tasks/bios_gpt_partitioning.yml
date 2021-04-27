@@ -1,22 +1,23 @@
 ---
-- name: partitioning - create bios/gpt boot partition
+- name: partitioning - create bios boot partition
   parted:
     device: "{{ target_device_id }}"
-    label: gpt
+    label: msdos
     name: boot
     number: 1
     part_start: "0%"
     part_end: '{{ boot_part_size }}'
     unit: "{{ boot_part_unit }}"
     flags:
-      - bios_grub
+      # - bios_grub
+      - boot
     align: undefined
     state: present
 
 - name: partitioning - create primary partition
   parted:
     device: "{{ target_device_id }}"
-    label: gpt
+    label: msdos
     name: root
     number: 2
     part_start: '{{ boot_part_size }}'
