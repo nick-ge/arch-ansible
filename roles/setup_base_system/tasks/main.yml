@@ -63,6 +63,6 @@
 - name: generate new initramfs
   command: "arch-chroot {{ mount_point }} mkinitcpio -P "
 
-- name: installation of grub
-  include_role: install_grub
-  when: grub
+  - include_role:
+    name: install_grub
+    when: grub
