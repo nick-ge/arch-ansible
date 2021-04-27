@@ -8,7 +8,7 @@
 
 - name: configure grub
   vars:
-    cryptvol_uuid: output.stdout
+    cryptvol_uuid: {{ output.stdout }}
   template:
     src: grub.j2
     dest: "{{ mount_point }}/etc/default/grub"
