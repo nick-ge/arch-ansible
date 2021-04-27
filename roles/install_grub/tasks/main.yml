@@ -4,9 +4,11 @@
 
 - name: get UUID of encrypted volume
   command: lsblk -n -o UUID /dev/sda2
-  stdin: cryptvol_uuid
+  register: output
 
 - name: configure grub
+  vars:
+    cryptvol_uuid: output.stdout
   template:
     src: grub.j2
     dest: "{{ mount_point }}/etc/default/grub"
