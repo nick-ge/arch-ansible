@@ -10,10 +10,11 @@ mount_point: /mnt
 
 bios_mbr: yes
 hostname: lenovo
+grub: yes
 
 timezone: /usr/share/zoneinfo/Europe/Berlin
 
 # locales
-keyboard_layout: KEYMAP=de
+keyboard_layout: de 
+locale: en_US.UTF-8
 
-grub: yes

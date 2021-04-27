@@ -1,6 +1,6 @@
 ---
 - name: generate fstab
-  command: "/usr/bin/genfstab -U {{ mount_point }}  >> {{ mount_point }}/etc/fstab"
+  command: "/usr/bin/genfstab -U {{ mount_point }} >> {{ mount_point }}/etc/fstab"
 
 - name: set timezone
   file:

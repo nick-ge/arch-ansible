@@ -2,6 +2,10 @@
 - name: install grub on target device
   command: "arch-chroot {{ mount_point }} grub-install --target=i386-pc {{ target_device_path }}"
 
+- name: get UUID of encrypted volume
+  command: lsblk -n -o UUID /dev/sda2
+  stdin: cryptvol_uuid
+
 - name: configure grub
   template:
     src: grub.j2
