@@ -3,7 +3,7 @@
   parted:
     device: "{{ target_device_id }}"
     label: msdos
-    name: boot
+    #name: boot
     number: 1
     part_start: "0%"
     part_end: '{{ boot_part_size }}'
@@ -11,14 +11,13 @@
     flags:
       # - bios_grub
       - boot
-    align: undefined
     state: present
 
 - name: partitioning - create primary partition
   parted:
     device: "{{ target_device_id }}"
     label: msdos
-    name: root
+    #name: root
     number: 2
     part_start: '{{ boot_part_size }}'
     part_end: "100%"
