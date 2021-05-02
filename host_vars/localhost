@@ -1,6 +1,4 @@
 ### device identifier that specifies where the system will be installed
-#target_device_uuid: d993a5a7-8630-4ac9-b320-5da9daedeb97
-target_device_path: /dev/sda
 # Get device id with lsblk -o +WWN
 #target_device_id: /dev/disk/by-id/ata-VBOX_HARDDISK_VBe91bd69a-d4066290
 target_device_id: /dev/disk/by-id/wwn-0x50014ee60530e76b

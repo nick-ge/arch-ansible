@@ -25,7 +25,7 @@
 
 - name: formatting - create ext4 on /boot partition
   filesystem:
-    dev: "/dev/sda1"
+    dev: "{{ target_device_id }}-part1"
     fstype: ext4
     state: present
     force: yes

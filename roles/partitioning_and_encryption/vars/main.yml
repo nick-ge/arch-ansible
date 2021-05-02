@@ -2,7 +2,6 @@ boot_part_size: 200MiB
 boot_part_unit: MiB
 
 # LUKS settings
-luks_partition_path: /dev/sda2
 luks_name: cryptlvm
 luks_passphrase: foobar1234
 

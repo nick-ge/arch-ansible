@@ -1,9 +1,9 @@
 ---
 - name: install grub on target device
-  command: "arch-chroot {{ mount_point }} grub-install --target=i386-pc {{ target_device_path }}"
+  command: "arch-chroot {{ mount_point }} grub-install --target=i386-pc {{ target_device_id }}"
 
 - name: get UUID of encrypted volume
-  command: "lsblk --noheadings --nodeps -o UUID /dev/sda2"
+  command: "lsblk --noheadings --nodeps -o UUID {{ target_device_id }}-part2"
   register: output
 
 - name: configure grub

@@ -32,6 +32,6 @@
 - name: mount boot partition
   mount:
     path: "{{ mount_point }}/boot"
-    src: /dev/sda1
+    src: "{{ target_device_id }}-part1" 
     fstype: ext4
     state: mounted
