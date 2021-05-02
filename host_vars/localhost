@@ -1,18 +1,31 @@
-### device identifier that specifies where the system will be installed
-# Get device id with lsblk -o +WWN
+# This specifies the device where the system will be installed. It is used as root from where two further partitions will be derived:
+# Partition 1: An unencrypted BIOS boot partition
+# Partition 2: A LUKS1 encrypted partition, that contains three more logical volumes for system, home and swap
+#
+# To get the device id use: lsblk -o +WWN
 target_device_id: /dev/disk/by-id/ata-VBOX_HARDDISK_VBe91bd69a-d4066290
-#target_device_id: /dev/disk/by-id/wwn-0x50014ee60530e76b
-###
+# target_device_id: /dev/disk/by-id/wwn-0x50014ee60530e76b
 
+# The mount point where the Arch live environment will mount the freshly installed system.
 mount_point: /mnt
 
+# Switch that indicates to install BIOS with a MBR partition table.
+# TODO: Add capability to install UEFI/GPT
 bios_mbr: yes
+
+# hostname the new system will receive.
 hostname: lenovo
+
+# Switch that indicates to install GRUB as bootloader.
+# TODO: Add capability to install alternative bootloaders.
 grub: yes
 
+# Path to timezone of new system
 timezone: /usr/share/zoneinfo/Europe/Berlin
 
-# locales
-keyboard_layout: de 
+# Specifiy keyboard layout
+keyboard_layout: de
+
+# Locale indicating system's language
 locale: en_US.UTF-8
 

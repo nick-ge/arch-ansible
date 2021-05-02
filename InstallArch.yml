@@ -1,7 +1,6 @@
 # author: Nick Gerzen
 #
-# Entry point of entire installation and setup process. It installs a base Arch Linux system and configures
-# it to special needs.
+# Entry point of entire installation and setup process. It installs a base Arch Linux system and configures it to special needs.
 ---
 - name: bootstrap base system
   hosts: target_device
