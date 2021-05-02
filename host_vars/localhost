@@ -1,7 +1,7 @@
 ### device identifier that specifies where the system will be installed
 # Get device id with lsblk -o +WWN
-#target_device_id: /dev/disk/by-id/ata-VBOX_HARDDISK_VBe91bd69a-d4066290
-target_device_id: /dev/disk/by-id/wwn-0x50014ee60530e76b
+target_device_id: /dev/disk/by-id/ata-VBOX_HARDDISK_VBe91bd69a-d4066290
+#target_device_id: /dev/disk/by-id/wwn-0x50014ee60530e76b
 ###
 
 mount_point: /mnt
