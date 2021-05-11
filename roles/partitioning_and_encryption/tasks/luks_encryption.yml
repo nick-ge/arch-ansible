@@ -1,5 +1,9 @@
 ---
-- name: encryption - create and open luks container
+- name: encryption - include password for LUKS container
+  include_vars:
+    file: password.yml
+
+- name: encryption - create and open LUKS container
   luks_device:
     device: "{{ target_device_id }}-part2"
     state: opened

@@ -3,7 +3,6 @@ boot_part_unit: MiB
 
 # LUKS settings
 luks_name: cryptlvm
-luks_passphrase: foobar1234
 
 # LVM settings
 volume_group: rootvg
