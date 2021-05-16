@@ -1,4 +1,4 @@
-localhost ip_address=127.0.0.1
+localhost ip_address=127.0.0.1 ansible_port=2222
 
 [target_device]
 localhost
